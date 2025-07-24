@@ -56,6 +56,7 @@ function App() {
         setPoints(prev => prev + 5); // +5 for correct match
         setTimeout(() => {
           setFlipped([]);
+          
           setDisabled(false);
         }, 1000);
       } else {
