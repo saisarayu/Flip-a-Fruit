@@ -1,0 +1,72 @@
+/* App.css */
+
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: sans-serif;
+  background: #f5d16f;
+}
+
+.game-container {
+  min-height: 100vh;
+  width: 100vw;
+  background: #f7e08e; /* your background color */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical center */
+  align-items: center;     /* horizontal center */
+}
+
+h1 {
+  color: #3d2db3;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.points {
+  font-size: 1.5rem;
+  color: #3d2db3;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+button {
+  background: #f7d358;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7em 2em;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(8, 100px);
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(2, 80px);
+    gap: 1rem;
+  }
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  background: transparent;
+  z-index: 10;
+}
