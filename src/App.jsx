@@ -16,7 +16,7 @@ function shuffle(array) {
     .map(({ value }) => value);
 }
 
-const GAME_SECONDS = 20;
+const GAME_SECONDS = 120;
 
 function App() {
   const [cards, setCards] = useState([]);
