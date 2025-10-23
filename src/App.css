@@ -1,72 +1,150 @@
 /* App.css */
 
-body, html, #root {
+:root {
+  --bg-start: #2e26a5;
+  --bg-end: #e9d27a;
+  --panel: rgba(255, 255, 255, 0.12);
+  --panel-border: rgba(255, 255, 255, 0.25);
+  --text: #fffbea;
+  --accent: #f7d358;
+  --card-size: 100px;
+}
+
+* { box-sizing: border-box; }
+
+/* Ensure full-viewport layout */
+html, body, #root {
   height: 100%;
+  width: 100%;
   margin: 0;
-  padding: 0;
 }
 
 body {
-  font-family: sans-serif;
-  background: #f5d16f;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans";
+  background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+  background-attachment: fixed;
+  background-size: 200% 200%;
+  animation: bgShift 18s ease infinite;
 }
 
+/* Center the board on the page */
 .game-container {
   min-height: 100vh;
-  width: 100vw;
-  background: #f7e08e; /* your background color */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* vertical center */
-  align-items: center;     /* horizontal center */
+  width: 100vw;                /* force full width */
+  display: grid;
+  place-items: center;
+  padding: 24px 16px 120px;    /* space for footer */
 }
 
-h1 {
-  color: #3d2db3;
-  font-size: 3rem;
-  margin-bottom: 1rem;
+/* Board sizing and look */
+.board {
+  width: min(1120px, 96vw);
+  padding: 24px 24px 28px;
+  border-radius: 16px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  backdrop-filter: blur(10px);
+  animation: fadeIn 600ms ease both;
+}
+
+/* Header row */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.badges { display: inline-flex; gap: 10px; }
+.points-badge.bump { animation: pulse 600ms ease; }
+
+/* Timer badge */
+.timer-badge {
+  color: var(--text);
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  min-width: 64px;
   text-align: center;
 }
-
-.points {
-  font-size: 1.5rem;
-  color: #3d2db3;
-  margin-bottom: 1rem;
-  font-weight: bold;
+.timer-badge.danger {
+  background: #e74c3c;
+  border-color: rgba(255,255,255,0.35);
+  animation: pulse 700ms ease infinite alternate;
 }
 
-button {
-  background: #f7d358;
-  border: none;
-  border-radius: 8px;
-  padding: 0.7em 2em;
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  cursor: pointer;
-}
-
+/* Grid */
 .grid {
   display: grid;
-  grid-template-columns: repeat(8, 100px);
-  gap: 1.5rem;
+  grid-template-columns: repeat(8, var(--card-size));
+  gap: 16px;
   justify-content: center;
-  align-items: center;
 }
 
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(2, 80px);
-    gap: 1rem;
-  }
+/* Responsive */
+@media (max-width: 1200px) { .grid { grid-template-columns: repeat(6, var(--card-size)); } }
+@media (max-width: 920px)  { .grid { grid-template-columns: repeat(4, var(--card-size)); } }
+@media (max-width: 560px)  {
+  :root { --card-size: 82px; }
+  .grid { grid-template-columns: repeat(3, var(--card-size)); }
 }
 
+/* Footer (floating reset) */
 .footer {
-  width: 100%;
-  display: flex;
-  justify-content: center;
   position: fixed;
-  bottom: 30px;
-  left: 0;
-  background: transparent;
-  z-index: 10;
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 1000;
+  pointer-events: none;
 }
+.footer .btn {
+  pointer-events: auto;
+  background: var(--accent);
+  border: none;
+  color: #1c1660;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+.footer .btn:hover { transform: translateY(-2px) scale(1.03); filter: brightness(1.05); }
+.footer .btn:active { transform: translateY(0); }
+
+/* Full-screen overlay for win/lose */
+.overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;  /* safer than inset for older engines */
+  width: 100vw; height: 100vh;           /* force full viewport */
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.55);
+  z-index: 2000;
+  animation: fadeIn 300ms ease both;
+}
+.overlay .modal {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(10px);
+  color: var(--text);
+  padding: 26px 28px;
+  border-radius: 16px;
+  min-width: 260px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: popIn 420ms cubic-bezier(.2,.8,.2,1) both;
+}
+.overlay.win .modal  { border-color: rgba(46,204,113,.6); box-shadow: 0 10px 30px rgba(46,204,113,.35); }
+.overlay.lose .modal { border-color: rgba(231,76,60,.6);  box-shadow: 0 10px 30px rgba(231,76,60,.35); }
+
+/* Keyframes */
+@keyframes bgShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+@keyframes fadeIn { from { opacity:0; transform: translateY(8px);} to { opacity:1; transform:none; } }
+@keyframes pulse  { 0%{ transform:scale(1)} 40%{transform:scale(1.08)} 100%{transform:scale(1)} }
+@keyframes popIn  { 0%{opacity:0; transform:scale(.9)} 60%{opacity:1; transform:scale(1.03)} 100%{transform:scale(1)} }

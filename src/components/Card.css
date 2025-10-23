@@ -1,9 +1,14 @@
 .card {
-  width: 100px;
-  height: 140px;
+  width: var(--card-size);
+  height: calc(var(--card-size) * 1.35);
   perspective: 1000px;
   cursor: pointer;
+  /* New: entrance + hover transition */
+  animation: popIn 480ms cubic-bezier(.2,.8,.2,1) both;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
+
+.card:hover { transform: translateY(-4px); }
 
 .card-inner {
   position: relative;
@@ -43,4 +48,80 @@
 .card-back {
   transform: rotateY(180deg);
   background: #f7d358;
+}
+
+/* Match pop + glow */
+.card.matched {
+  animation: matchPop 520ms cubic-bezier(.2,.9,.2,1);
+  box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.0);
+}
+.card.matched .card-front,
+.card.matched .card-back {
+  border: 1px solid rgba(46, 204, 113, 0.55);
+  box-shadow: 0 6px 16px rgba(46, 204, 113, 0.35);
+}
+
+/* Mismatch shake */
+.card.miss .card-inner {
+  animation: missShake 600ms cubic-bezier(.36,.07,.19,.97);
+}
+.card.miss .card-front,
+.card.miss .card-back {
+  border: 1px solid rgba(231, 76, 60, 0.5);
+  box-shadow: 0 6px 16px rgba(231, 76, 60, 0.25);
+}
+
+/* Keyframes */
+@keyframes matchPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@keyframes missShake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+
+/* Subtle stagger for first 32 cards (covers 8x4 if needed) */
+.grid .card:nth-child(1)  { animation-delay: 30ms; }
+.grid .card:nth-child(2)  { animation-delay: 60ms; }
+.grid .card:nth-child(3)  { animation-delay: 90ms; }
+.grid .card:nth-child(4)  { animation-delay: 120ms; }
+.grid .card:nth-child(5)  { animation-delay: 150ms; }
+.grid .card:nth-child(6)  { animation-delay: 180ms; }
+.grid .card:nth-child(7)  { animation-delay: 210ms; }
+.grid .card:nth-child(8)  { animation-delay: 240ms; }
+.grid .card:nth-child(9)  { animation-delay: 270ms; }
+.grid .card:nth-child(10) { animation-delay: 300ms; }
+.grid .card:nth-child(11) { animation-delay: 330ms; }
+.grid .card:nth-child(12) { animation-delay: 360ms; }
+.grid .card:nth-child(13) { animation-delay: 390ms; }
+.grid .card:nth-child(14) { animation-delay: 420ms; }
+.grid .card:nth-child(15) { animation-delay: 450ms; }
+.grid .card:nth-child(16) { animation-delay: 480ms; }
+.grid .card:nth-child(17) { animation-delay: 510ms; }
+.grid .card:nth-child(18) { animation-delay: 540ms; }
+.grid .card:nth-child(19) { animation-delay: 570ms; }
+.grid .card:nth-child(20) { animation-delay: 600ms; }
+.grid .card:nth-child(21) { animation-delay: 630ms; }
+.grid .card:nth-child(22) { animation-delay: 660ms; }
+.grid .card:nth-child(23) { animation-delay: 690ms; }
+.grid .card:nth-child(24) { animation-delay: 720ms; }
+.grid .card:nth-child(25) { animation-delay: 750ms; }
+.grid .card:nth-child(26) { animation-delay: 780ms; }
+.grid .card:nth-child(27) { animation-delay: 810ms; }
+.grid .card:nth-child(28) { animation-delay: 840ms; }
+.grid .card:nth-child(29) { animation-delay: 870ms; }
+.grid .card:nth-child(30) { animation-delay: 900ms; }
+.grid .card:nth-child(31) { animation-delay: 930ms; }
+.grid .card:nth-child(32) { animation-delay: 960ms; }
+
+/* Keyframe for card pop-in */
+@keyframes popIn {
+  0%   { opacity: 0; transform: scale(0.9); }
+  60%  { opacity: 1; transform: scale(1.03); }
+  100% { opacity: 1; transform: scale(1); }
 }
